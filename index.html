@@ -452,6 +452,21 @@ svg.chart .ax{fill:var(--muted);font-size:10px}
 .in-x{background:none;border:0;color:var(--muted);cursor:pointer;padding:4px}
 .in-x .ic{width:18px;height:18px}
 
+.hr-note{font-size:.86rem;background:color-mix(in srgb,var(--bad) 12%,transparent);border-left:4px solid var(--bad);border-radius:10px;padding:10px 12px;margin:10px 0}
+.src-i.hr-i{display:block;width:100%;background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.add-pill{border-style:dashed;color:var(--muted)}
+.add-pill .ic{width:15px;height:15px}
+.mainbtn{grid-row:2}
+.mainbtn.rm{grid-column:1;color:var(--bad)}
+.cs-list{display:grid;gap:6px;margin-top:10px}
+.cs-row{display:grid;grid-template-columns:34px 1fr auto auto;gap:10px;align-items:center;padding:10px;border-radius:14px;background:var(--surface2)}
+.cs-row.own{background:color-mix(in srgb,var(--amber) 12%,var(--surface2));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--amber) 45%,transparent)}
+.cs-ic{font-size:1.5rem;text-align:center}
+.cs-n{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.cs-n small{color:var(--muted);font-size:.76rem}
+.cs-tag .linkbtn{padding:0;font-size:.76rem}
+.cs-o{font-family:'Saira Condensed',sans-serif;font-size:1.6rem;min-width:34px;text-align:right}
+
 /* Toast */
 .toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px) scale(.96);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:14px;font-size:.92rem;font-weight:600;opacity:0;transition:opacity .25s,transform .35s var(--ease);z-index:80;max-width:90vw;text-align:center;pointer-events:none;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
 .toast.show{opacity:1;transform:translate(-50%,0) scale(1)}
@@ -607,7 +622,7 @@ const TESTS={
  pushups:{n:'Max Push-ups',u:'reps',a:'STR',w:.5,ph:'35',r:[0,200],f:.6,m:[[3,22],[10,35],[20,46],[30,56],[40,65],[50,74],[60,82],[75,90],[90,96],[105,99]],how:'Unbroken, chest to fist height, body straight. Stop when form breaks.'},
  mile:{n:'1-Mile Run',u:'min',a:'END',lo:1,ph:'7:45',r:[3.8,30],f:1.13,m:[[15,22],[12.5,35],[10.5,47],[9,57],[8,65],[7,73],[6.25,80],[5.6,87],[5,93],[4.5,97],[4.1,99]],how:'Four laps of a track, all out. Enter as m:ss.'},
  fivek:{n:'5K Run',u:'min',a:'END',lo:1,ph:'26:30',r:[12.5,90],f:1.13,m:[[45,22],[36,35],[30,47],[26,57],[23,66],[21,74],[19,82],[17.3,89],[15.8,95],[14.2,99]],how:'3.1 miles. Enter as mm:ss.'},
- rhr:{n:'Resting Heart Rate',u:'bpm',a:'END',lo:1,w:.5,ph:'64',r:[30,130],f:1.04,m:[[95,25],[85,38],[78,48],[72,57],[66,66],[60,75],[54,84],[48,92],[42,98],[38,99]],how:'Measure right after waking, lying down, for 60 seconds. A watch average works.'},
+ rhr:{n:'Resting Heart Rate',u:'bpm',a:'END',lo:1,w:.5,ph:'64',r:[30,130],best:48,f:1.04,m:[[100,25],[90,35],[82,45],[76,55],[70,64],[65,72],[60,80],[55,87],[50,91],[45,92],[42,86],[40,78],[37,62],[33,45],[30,35]],how:'Measure right after waking, lying down, for 60 seconds. A watch average works.'},
  pitchVelo:{n:'Pitch Velocity',u:'mph',a:'TLS',ph:'78',r:[30,106],f:.78,m:[[50,28],[60,40],[68,50],[75,60],[80,68],[84,75],[88,82],[91,87],[94,92],[97,96],[100,99]],how:'Peak fastball velo off a radar gun or Pocket Radar. Softball: windmill pitch speed.'},
  exitVelo:{n:'Exit Velocity',u:'mph',a:'TLS',ph:'85',r:[30,125],f:.85,m:[[55,28],[65,40],[73,50],[80,60],[86,68],[91,76],[95,83],[99,89],[104,94],[109,98],[113,99]],how:'Max exit speed off a tee or front toss, measured by radar or a sensor like Rapsodo/HitTrax.'},
  throwVelo:{n:'Position Throw Velo',u:'mph',a:'TLS',ph:'78',r:[30,105],f:.82,m:[[50,28],[60,40],[68,51],[75,62],[80,70],[85,78],[89,85],[93,91],[97,96],[100,99]],how:'Infield across the diamond, outfield crow-hop to a target, or catcher to second, by radar.'},
@@ -630,10 +645,11 @@ const AGE_CURVE={
  str:[[12,.48],[13,.55],[14,.63],[15,.72],[16,.8],[17,.87],[18,.92],[19,.96],[20,1],[34,1],[35,.98],[40,.93],[45,.89],[50,.84],[55,.79],[60,.73],[70,.62]],
  vel:[[12,.7],[13,.75],[14,.8],[15,.86],[16,.9],[17,.94],[18,.97],[19,.99],[20,1],[34,1],[40,.95],[50,.9],[60,.85],[70,.8]],
  rt:[[12,1.08],[14,1.04],[16,1.01],[18,1],[34,1],[40,1.03],[50,1.06],[60,1.1],[70,1.15]],
+ hr:[[12,1.14],[14,1.1],[16,1.05],[18,1.02],[20,1]],
  hgt:[[12,.85],[13,.88],[14,.92],[15,.955],[16,.975],[17,.99],[18,1]],
  wgt:[[12,.55],[13,.62],[14,.7],[15,.78],[16,.85],[17,.91],[18,.95],[19,.98],[20,1]]
 };
-const TEST_CAT={forty:'time',split10:'time',hundred:'time',fourHundred:'time',sixty:'time',sprint30:'time',court34:'time',shuttle:'time',cone3:'time',lane:'time',swim100:'time',mile:'end',fivek:'end',vert:'pow',broad:'pow',clean:'str',bench:'str',squat:'str',deadlift:'str',ohp:'str',bench225:'str',bench185:'str',pullups:'str',pushups:'str',pitchVelo:'vel',exitVelo:'vel',throwVelo:'vel',shotSpeed:'vel',clubSpeed:'vel'};
+const TEST_CAT={rhr:'hr',forty:'time',split10:'time',hundred:'time',fourHundred:'time',sixty:'time',sprint30:'time',court34:'time',shuttle:'time',cone3:'time',lane:'time',swim100:'time',mile:'end',fivek:'end',vert:'pow',broad:'pow',clean:'str',bench:'str',squat:'str',deadlift:'str',ohp:'str',bench225:'str',bench185:'str',pullups:'str',pushups:'str',pitchVelo:'vel',exitVelo:'vel',throwVelo:'vel',shotSpeed:'vel',clubSpeed:'vel'};
 let ADULT=false;
 function lerp(t,x){if(x<=t[0][0])return t[0][1];const n=t.length;if(x>=t[n-1][0])return t[n-1][1];for(let i=0;i<n-1;i++){const[x0,y0]=t[i],[x1,y1]=t[i+1];if(x<=x1)return y0+(y1-y0)*(x-x0)/(x1-x0)}return 1}
 function effAge(){const a=ageOf(S.profile.dob);return fem()&&a<20?Math.min(20,a+1.5):a}
@@ -1157,9 +1173,23 @@ function render(anim=false){
   POP=null;SWAPPED=null;
   setTimeout(maybeBday,450);
 }
+/* Same test results, rated at your best position in every sport. Prefers positions where at least half the
+   rating is actually tested, so a barely-tested position can't top the list. */
+function sportCompare(){
+  const mine=S.profile.sports||[],main=S.profile.primary||0;
+  const rows=Object.entries(SPORTS).map(([k,sp])=>{let best=null;
+    sp.pos.forEach(p=>{const c=makeCtx(k,p[0]),r=rate(c);if(!r.ready)return;const q=r.cov>=.5?1:0;if(!best||q>best.q||(q===best.q&&r.ovr>best.r.ovr))best={c,r,q}});
+    return{k,sp,best,own:mine.find(x=>x.s===k)}});
+  rows.sort((a,b)=>(b.own?1:0)-(a.own?1:0)||(b.best?b.best.r.ovr:-1)-(a.best?a.best.r.ovr:-1));
+  return `<div class="sh-head"><h2>Compare sports</h2><p class="small muted">Your same test results, rated at your best position in every sport. More tests make this more accurate.</p></div>
+  <div class="cs-list">${rows.map(x=>{const b=x.best,isMain=x.own&&mine.indexOf(x.own)===main,ownPos=x.own?(x.sp.pos.find(p=>p[0]===x.own.p)||x.sp.pos[0])[1]:'';
+    return `<div class="cs-row ${x.own?'own':''}"><span class="cs-ic" aria-hidden="true">${x.sp.i}</span><span class="cs-n"><b>${x.sp.n}</b><small>${b?`Best at ${esc(b.c.posName)}, ${b.r.n+1} of ${b.r.tot} tested`:'Log a test to compare'}</small>${x.own?`<small class="cs-tag">${isMain?'Main sport':'Your sport'}: ${esc(ownPos)}${isMain?'':` <button class="linkbtn" onclick="App.mainSport('${x.k}')">Make main</button>`}</small>`:''}</span><b class="cs-o num ${b?tone(b.r.ovr):'muted'}">${b?b.r.ovr:'–'}</b>${x.own?`<button class="btn sm" onclick="App.removeSport('${x.k}')">Remove</button>`:`<button class="btn sm primary" onclick="App.addSport('${x.k}','${b?b.c.abbr:x.sp.pos[0][0]}')">Add</button>`}</div>`}).join('')}</div>
+  <p class="tiny muted">Removing a sport keeps all your test results. Added sports start at your best position; change it in Profile.</p>`;
+}
+function refreshCompare(){const si=document.querySelector('#sheet-root .sheet-in');if(si&&si.querySelector('.cs-list'))si.innerHTML=sportCompare()}
 function ctxBar(ctx){
-  const l=allCtxs();if(l.length<2)return'';
-  return `<div class="seg-scroll" role="tablist" aria-label="Rate me as">${l.map(c=>`<button role="tab" aria-selected="${c.key===ctx.key}" class="pill ${c.key===ctx.key?'on':''}" onclick="App.ctx('${c.key}')" title="${esc(c.label)}"><span aria-hidden="true">${c.icon}</span>${esc(c.key==='general'?'General':c.abbr)}</button>`).join('')}</div>`;
+  const l=allCtxs();
+  return `<div class="seg-scroll" role="tablist" aria-label="Rate me as">${l.map(c=>`<button role="tab" aria-selected="${c.key===ctx.key}" class="pill ${c.key===ctx.key?'on':''}" onclick="App.ctx('${c.key}')" title="${esc(c.label)}"><span aria-hidden="true">${c.icon}</span>${esc(c.key==='general'?'General':c.abbr)}</button>`).join('')}<button class="pill add-pill" onclick="App.compare()" aria-label="Compare sports, add or remove them">${ico('swap')}Compare sports</button></div>`;
 }
 
 /* ---- Card ---- */
@@ -1193,7 +1223,7 @@ function emptyHome(ctx,shown){
   <section class="panel callout"><h3>Log one test to get rated</h3><p class="small muted">Your body measurements are in, but nobody gets a rating from size alone. Pick anything you can do today. Tests you skip just aren’t counted.</p><div class="tiles">${['pushups','broad','mile','reaction'].map((id,i)=>tile(id,ctx,i)).join('')}</div></section>`;
 }
 /* Smallest value of a test that reaches a score (largest, for times). */
-function valueFor(id,score,ctx){const T=TESTS[id];let lo=T.r[0],hi=T.r[1];const ok=v=>testScore(id,v,ctx)>=score;
+function valueFor(id,score,ctx){const T=TESTS[id];let lo=T.best??T.r[0],hi=T.r[1];const ok=v=>testScore(id,v,ctx)>=score;
   if(T.lo){if(!ok(lo))return null;for(let i=0;i<40;i++){const m=(lo+hi)/2;if(ok(m))lo=m;else hi=m}return lo}
   if(!ok(hi))return null;for(let i=0;i<40;i++){const m=(lo+hi)/2;if(ok(m))hi=m;else lo=m}return hi}
 function listJoin(a){return a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1]}
@@ -1239,7 +1269,7 @@ function attrRow(a,ctx,r){
   const x=r.at[a],w=ctx.w[ATTRS.indexOf(a)],pct=Math.round(w/r.tw*100);let det;
   if(a==='BLD'){const b=x.b;det=`${b.uw?`<span class="src-i b">Underweight: BMI ${b.B.bmi.toFixed(1)}, healthy starts near ${b.thr.toFixed(1)}</span>`:''}<span class="src-i">Body fat ~${b.B.bf.toFixed(1)}% <span class="muted">(${b.B.src})</span> <b class="${tone(b.comp)}">${b.comp}</b></span>${b.frame!=null?`<span class="src-i">Frame for ${esc(ctx.posName.toLowerCase())} <b class="${tone(b.frame)}">${b.frame}</b></span><span class="src-i muted">Typical ${hDisp(b.range[0])}–${hDisp(b.range[1])}, ${wDisp(b.range[2])}–${wDisp(b.range[3])}</span>`:''}`}
   else if(x.v==null){const tid=testFor(a,ctx);det=`<span class="src-i muted">Not tested, so it isn’t counted.</span>${tid?`<button class="btn sm" onclick="App.openTest('${tid}')">${ico('plus')}Add ${tid==='reaction'?'reaction test':TESTS[tid].n}</button>`:''}`}
-  else det=x.src.map(s=>`<span class="src-i">${srcLabel(s)} <b class="${tone(Math.round(s.sc))}">${Math.round(s.sc)}</b></span>`).join('')+(x.capped?'<span class="src-i muted">Mind tops out at 70 until you take the reaction test.</span>':'');
+  else det=x.src.map(s=>`<span class="src-i">${srcLabel(s)} <b class="${tone(Math.round(s.sc))}">${Math.round(s.sc)}</b></span>`).join('')+(x.capped?'<span class="src-i muted">Mind tops out at 70 until you take the reaction test.</span>':'')+(a==='END'&&hrNote(latest('rhr'))?`<span class="src-i hr-i">${hrNote(latest('rhr'))}</span>`:'');
   return `<details class="arow"><summary><span class="adot" style="--c:${ACOL[a]}"></span><span class="aname">${AN[a]}</span><span class="abar"><i style="--w:${x.v||0}%;background:${ACOL[a]}"></i></span><b class="aval num ${x.v==null?'muted':tone(x.v)}">${x.v??'–'}</b></summary><div class="adet"><p class="small muted">${AWHY[a]} ${x.v==null?'':`Worth ${pct}% of your ${esc(ctx.abbr)} rating.`}</p><div class="srcs">${det}</div></div></details>`;
 }
 function advice(a,ctx,r){
@@ -1311,10 +1341,12 @@ function tileHtml(id,a,name,val,sc,i){
 }
 function testSheet(id){
   const T=TESTS[id],ctx=curCtx(),v=latest(id),hist=S.tests[id]||[],sc=v!=null?Math.round(testScore(id,v,ctx)):null,pts=scaledPts(id,ctx);
-  const anc=[50,70,85,99].map(rv=>{const x=inv(pts,rv);return `<div class="anc"><b class="num">${rv}</b><span class="num">${T.repLoad?repsFor(id,rv,ctx):T.rel?wDisp(x*effW(ctx)):fmt(id,x)}</span></div>`}).join('');
+  const pk=pts.reduce((a,b)=>b[1]>a[1]?b:a),apts=T.lo?pts.filter(q=>q[0]>=pk[0]):pts;
+  const anc=[50,70,85,Math.min(99,Math.round(pk[1]))].map(rv=>{const x=inv(apts,rv);return `<div class="anc"><b class="num">${rv}</b><span class="num">${T.repLoad?repsFor(id,rv,ctx):T.rel?wDisp(x*effW(ctx)):fmt(id,x)}</span></div>`}).join('');
   const unit=unitLbl(T);
   return `<div class="sh-head"><span class="tchip" style="--c:${ACOL[T.a]}">${AN[T.a]}</span><h2>${T.n}</h2>${v!=null?`<p class="small">Latest <b class="num">${fmt(id,v)}</b> scores <b class="num ${tone(sc)}">${sc}</b>${latestVer(id)?' <span class="ver-badge">✓ Verified</span>':''}</p>`:''}</div>
   <p class="small muted">${T.how}</p>
+  ${id==='rhr'&&hrNote(v)?`<p class="hr-note">${hrNote(v)}</p>`:''}
   <div class="sub">What scores look like at your age${T.rel?' and weight':''}</div><div class="ancs">${anc}</div>
   <div class="field"><input id="in-${id}" inputmode="decimal" placeholder="${esc(phDisp(T))}" autocomplete="off" aria-label="${T.n} result" onkeydown="if(event.key==='Enter')App.logTest('${id}')"><span>${unit}</span></div>
   ${T.rel?`<details class="est"><summary>Don’t know your max? Estimate it from a set</summary><div class="est-row"><div class="field sm"><input id="ew-${id}" inputmode="decimal" placeholder="Weight" aria-label="Weight lifted"><span>${wU()}</span></div><div class="field sm"><input id="er-${id}" inputmode="numeric" placeholder="Reps" aria-label="Reps"><span>reps</span></div><button class="btn" onclick="App.est('${id}')">Estimate</button></div></details>`:''}
@@ -1434,7 +1466,7 @@ function viewProgress(){
 function startDraft(){const P=S.profile;draft={sports:P?(P.sports||[]).map(x=>({...x})):[],primary:P?P.primary||0:0}}
 function sportsPicker(){
   return `<div class="sport-grid">${Object.entries(SPORTS).map(([k,s])=>{const on=draft.sports.some(x=>x.s===k);return `<button type="button" class="sport ${on?'on':''}" aria-pressed="${on}" onclick="App.toggleSport('${k}')"><span aria-hidden="true">${s.i}</span>${s.n}</button>`}).join('')}</div>
-  ${draft.sports.length?`<div class="sub">Positions</div>${draft.sports.map((x,i)=>`<div class="posrow"><span class="ps-n"><span aria-hidden="true">${SPORTS[x.s].i}</span>${SPORTS[x.s].n}</span><select aria-label="${SPORTS[x.s].n} position" onchange="App.setPos(${i},this.value)">${SPORTS[x.s].pos.map(p=>`<option value="${p[0]}" ${p[0]===x.p?'selected':''}>${p[1]}</option>`).join('')}</select>${draft.sports.length>1?`<button type="button" class="mainbtn ${draft.primary===i?'on':''}" onclick="App.setPrimary(${i})" aria-pressed="${draft.primary===i}">${draft.primary===i?'Main sport':'Make main'}</button>`:''}</div>`).join('')}`:'<p class="small muted">No sport picked? You’ll be rated as a general athlete.</p>'}`;
+  ${draft.sports.length?`<div class="sub">Positions</div>${draft.sports.map((x,i)=>`<div class="posrow"><span class="ps-n"><span aria-hidden="true">${SPORTS[x.s].i}</span>${SPORTS[x.s].n}</span><select aria-label="${SPORTS[x.s].n} position" onchange="App.setPos(${i},this.value)">${SPORTS[x.s].pos.map(p=>`<option value="${p[0]}" ${p[0]===x.p?'selected':''}>${p[1]}</option>`).join('')}</select>${draft.sports.length>1?`<button type="button" class="mainbtn ${draft.primary===i?'on':''}" onclick="App.setPrimary(${i})" aria-pressed="${draft.primary===i}">${draft.primary===i?'Main sport':'Make main'}</button>`:''}<button type="button" class="mainbtn rm" onclick="App.toggleSport('${x.s}')">Remove</button></div>`).join('')}`:'<p class="small muted">No sport picked? You’ll be rated as a general athlete.</p>'}`;
 }
 function autoLvl(dob){const a=ageOf(dob);return a<14?'ms':a<18.5?'hs':a<23?'college':'rec'}
 function viewOnboard(){
@@ -1548,7 +1580,12 @@ function parseVal(id,str){
 }
 /* Results far beyond normal improvement, or at elite level, get a double-check before they count. */
 let PEND_T=null;
+/* Resting heart rate outside the healthy range gets a plain-language health note. */
+function hrNote(v){if(v==null)return'';const low=Math.round(40*ageF('hr'));
+  if(v<low)return `Under ${low} bpm at rest can be normal for highly trained endurance athletes, but it can also be a sign of a heart rhythm problem, so it scores lower here, not higher. See a doctor, especially if you get dizzy, faint, short of breath or unusually tired.`;
+  if(v>100)return'Over 100 bpm at rest is high. Recheck lying down right after waking. If it stays that high, check in with a doctor.';return''}
 function outlierWhy(id,v,ctx){
+  if(id==='rhr'&&hrNote(v))return hrNote(v);
   const T=TESTS[id],last=latest(id),sc=testScore(id,v,ctx);
   if(last!=null){const big=T.u==='reps'?(v-last>Math.max(4,last*.3)):T.lo?(last-v)/last>.06:(v-last)/Math.max(last,1)>(T.a==='STR'?.2:.15);
     if(big)return `That’s a much bigger jump from your last result (${fmt(id,last)}) than athletes usually make between tests.`}
@@ -1557,7 +1594,7 @@ function outlierWhy(id,v,ctx){
 }
 function outlierSheet(id,v,why){
   return `<div class="sh-head"><span class="tchip" style="--c:${ACOL[TESTS[id].a]}">Double-check</span><h2>${fmt(id,v)}: is that right?</h2></div>
-  <p class="small">${why}</p><p class="small muted">Hand timing, short courses and partial reps are the usual culprits. Honest numbers keep your rating meaningful.</p>
+  <p class="small">${why}</p><p class="small muted">${id==='rhr'?'Measure lying down right after waking, for a full 60 seconds. Watches and phone cameras can misread.':'Hand timing, short courses and partial reps are the usual culprits. Honest numbers keep your rating meaningful.'}</p>
   <div class="confirm-col"><button class="btn primary block" onclick="App.confirmTest(true)">Yes, it was coach-timed or measured</button><button class="btn block" onclick="App.confirmTest(false)">Yes, save it as is</button><button class="btn block" onclick="App.fixTest()">Let me fix it</button></div>`;
 }
 function readProfileForm(){
@@ -1579,6 +1616,11 @@ window.App={
   tf(k){S.ui.tf=k;save();render(false)},
   lb(k){S.ui.lb=k;save();render(false)},
   how(){openSheet(howSheet())},
+  compare(){openSheet(sportCompare())},
+  addSport(k,p){const sp=S.profile.sports=S.profile.sports||[];if(sp.some(x=>x.s===k))return;sp.push({s:k,p});draft=null;snapshot();save();refreshCompare();render(false);toast(`Added ${SPORTS[k].n}`)},
+  removeSport(k){const sp=S.profile.sports||[],i=sp.findIndex(x=>x.s===k);if(i<0)return;sp.splice(i,1);let pr=S.profile.primary||0;if(i<pr)pr--;else if(i===pr)pr=0;S.profile.primary=sp.length?Math.min(pr,sp.length-1):0;
+    if(!allCtxs().some(c=>c.key===S.ui.ctx))S.ui.ctx=primaryCtx().key;draft=null;snapshot();save();refreshCompare();render(false);toast(`Removed ${SPORTS[k].n}. Your test results are kept.`)},
+  mainSport(k){const i=(S.profile.sports||[]).findIndex(x=>x.s===k);if(i<0)return;S.profile.primary=i;S.ui.ctx=primaryCtx().key;draft=null;snapshot();save();refreshCompare();render(false);toast(`${SPORTS[k].n} is now your main sport`)},
   goalSheet(){openSheet(goalSheet())},
   saveGoal(){const ctx=curCtx(),r=rate(ctx),t=parseInt($('#g-t').value,10),by=$('#g-d').value;
     if(!(t>r.ovr&&t<=99)){toast(`Pick a target between ${r.ovr+1} and 99`);return}
